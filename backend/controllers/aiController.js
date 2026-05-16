@@ -1,32 +1,21 @@
-import OpenAI from "openai";
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-export const askAI = async (req, res) => {
+export const getAIInsights = async (req, res) => {
   try {
-    const { message } = req.body;
+    const insights = [
+      "Your savings are improving this month.",
+      "Food expenses increased compared to last week.",
+      "You are maintaining a healthy financial balance.",
+      "Try reducing subscription expenses to save more.",
+      "Your recurring expenses are stable this month."
+    ];
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        {
-          role: "system",
-          content:
-            "You are a smart finance assistant helping users manage expenses and savings.",
-        },
-        {
-          role: "user",
-          content: message,
-        },
-      ],
-    });
-
-     res.json({
-      reply: completion.choices[0].message.content,
+    res.status(200).json({
+      success: true,
+      insights,
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 };
